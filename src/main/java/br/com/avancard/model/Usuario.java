@@ -3,6 +3,8 @@ package br.com.avancard.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -21,6 +23,8 @@ public class Usuario implements Serializable { //Serializable: Habilita a serial
     private String senha;
     private String nome;
 
+    @OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Telefone> telefone = new ArrayList<>();
 
     //MÉTODOS ESPECIAIS
     public Long getId() {
@@ -46,6 +50,12 @@ public class Usuario implements Serializable { //Serializable: Habilita a serial
     }
     public void setNome(String nome) {
         this.nome = nome;
+    }
+    public List<Telefone> getTelefone() {
+        return telefone;
+    }
+    public void setTelefone(List<Telefone> telefone) {
+        this.telefone = telefone;
     }
 
 
