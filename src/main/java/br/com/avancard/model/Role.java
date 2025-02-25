@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Entity
 @Table(name = "role_spring_rest_api")
 @SequenceGenerator(name = "seq_role", sequenceName = "seq_role", allocationSize = 1, initialValue = 1)
-public class Role implements GrantedAuthority {
+public class Role implements GrantedAuthority { //CLASSE QUE IMPLEMENTA O GrantedAuthority PARA AS AUTORIZAÇÕES
     private static final long serialVersionUID = 1L;
 
     //ATRIBUTOS
