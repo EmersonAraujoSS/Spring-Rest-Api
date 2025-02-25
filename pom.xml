@@ -29,7 +29,9 @@
     </scm>
     <properties>
         <java.version>17</java.version>
+        <spring.security.version>6.2.1</spring.security.version>
     </properties>
+
     <dependencies>
         <!-- Spring Jpa -->
         <dependency>
@@ -55,6 +57,13 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+
+        <!-- ######### SPRING SECURITY ######### -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <dependency>
             <!-- SQL Server JDBC Driver -->
             <groupId>com.microsoft.sqlserver</groupId>
