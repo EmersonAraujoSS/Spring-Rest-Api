@@ -3,13 +3,22 @@ package br.com.avancard.controller;
 import br.com.avancard.model.Telefone;
 import br.com.avancard.model.TelefoneDTO;
 import br.com.avancard.model.Usuario;
+import br.com.avancard.model.UsuarioDTO;
 import br.com.avancard.repository.TelefoneRepository;
 import br.com.avancard.repository.UsuarioRepository;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,10 +51,10 @@ public class IndexController {
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<Usuario> buscaPorId(@PathVariable(value = "id") Long id){
+    public ResponseEntity<UsuarioDTO> buscaPorId(@PathVariable(value = "id") Long id){
 
         Optional<Usuario> usuario = usuarioRepository.findById(id);
-        return new ResponseEntity<>(usuario.get(), HttpStatus.OK);
+        return new ResponseEntity<UsuarioDTO>(new UsuarioDTO(usuario.get()), HttpStatus.OK);
     }
 
     @GetMapping(value = "/listar", produces = "application/json")
@@ -56,12 +65,36 @@ public class IndexController {
     }
 
     @PostMapping(value = "/", produces = "application/json") //nesse método, se eu não passar o id, ele já gera automaticamente um usuário com o id
-    public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario){
+    public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario) throws Exception {
 
         for(int pos = 0; pos < usuario.getTelefone().size(); pos++){
             usuario.getTelefone().get(pos).setUsuario(usuario);
         }
 
+        //Consumindo api publica externa (CEP)
+        URL url = new URL("https://viacep.com.br/ws/"+usuario.getCep()+"/json/"); //buscando o cep na api
+        URLConnection connection = url.openConnection(); //abrindo a conexão
+        InputStream inputStream = connection.getInputStream(); //retorno dos dados
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+
+        String cep = "";
+        StringBuilder jsonCep = new StringBuilder();
+        while((cep = br.readLine()) != null){
+            jsonCep.append(cep);
+        }
+        System.out.println(jsonCep.toString());
+
+        Usuario userAux = new Gson().fromJson(jsonCep.toString(), Usuario.class);
+        usuario.setCep(userAux.getCep());
+        usuario.setLogradouro(userAux.getLogradouro());
+        usuario.setComplemento(userAux.getComplemento());
+        usuario.setBairro(userAux.getBairro());
+        usuario.setLocalidade(userAux.getLocalidade());
+        usuario.setUf(usuario.getUf());
+
+
+        String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getSenha());
+        usuario.setSenha(senhaCriptografada);
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
         return new ResponseEntity<>(usuarioSalvo, HttpStatus.OK);
     }
