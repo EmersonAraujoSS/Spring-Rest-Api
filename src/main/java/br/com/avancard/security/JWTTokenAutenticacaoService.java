@@ -48,6 +48,9 @@ public class JWTTokenAutenticacaoService {
         String token = TOKEN_PREFIX + " " + jwt;
         // Adicionando o token no cabeçalho da resposta HTTP
         response.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + token);
+
+        ApplicationContextLoad.getApplicationContext().getBean(UsuarioRepository.class).atualizarTokenUser(token, username);
+
         // escreve o token como resposta no corpo http
         response.getWriter().println("{\"Authorization\": \""+token+"\"}");
     }

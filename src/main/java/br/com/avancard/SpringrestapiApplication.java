@@ -21,7 +21,6 @@ public class SpringrestapiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SpringrestapiApplication.class, args);
-        System.out.println(new BCryptPasswordEncoder().encode("123"));
     }
 
 }
