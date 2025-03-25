@@ -5,10 +5,11 @@ import br.com.avancard.model.Usuario;
 import br.com.avancard.repository.UsuarioRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,6 @@ import java.security.Key;
 import java.util.Date;
 
 @Service
-@Component
 public class JWTTokenAutenticacaoService {
 
     // Tempo de validade do token (esse tempo é 2 dias em milissegundos)
@@ -48,8 +48,6 @@ public class JWTTokenAutenticacaoService {
         String token = TOKEN_PREFIX + " " + jwt;
         // Adicionando o token no cabeçalho da resposta HTTP
         response.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + token);
-
-        ApplicationContextLoad.getApplicationContext().getBean(UsuarioRepository.class).atualizarTokenUser(token, username);
 
         // escreve o token como resposta no corpo http
         response.getWriter().println("{\"Authorization\": \""+token+"\"}");

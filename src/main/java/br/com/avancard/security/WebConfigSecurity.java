@@ -20,7 +20,6 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
-@EnableWebSecurity
 public class WebConfigSecurity { //Mapeia URL, endereços, autoriza ou bloqueia acessos às URLs
 
     @Autowired

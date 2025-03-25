@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin //Liberação de acesso ao meu controller com o CrossOrigin (Esse meu controller pode acessado de qualquer lugar)
+//@CrossOrigin //Liberação de acesso ao meu controller com o CrossOrigin (Esse meu controller pode acessado de qualquer lugar)
 @RestController
 @RequestMapping(value = "/usuario") // RequestMapping = uso para indicar qual endpoint vai acessar esse controller
 public class IndexController {

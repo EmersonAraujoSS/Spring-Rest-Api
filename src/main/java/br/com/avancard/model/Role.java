@@ -14,7 +14,6 @@ public class Role implements GrantedAuthority { //CLASSE QUE IMPLEMENTA O Grante
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_role")
     private Long id;
-
     private String nomeRole;
 
 
